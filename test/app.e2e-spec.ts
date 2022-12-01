@@ -93,6 +93,68 @@ describe('App e2e', () => {
       email: 'test@test.com',
       password: '123',
     };
+    describe('Signin', () => {
+      it('should signin', () => {
+        return pactum
+          .spec()
+          .post('/auth/signin')
+          .withBody(signinDto)
+          .expectStatus(200);
+      });
+
+      describe('signin exceptions', () => {
+        it('should throw 403 (incorrect email)', () => {
+          return pactum
+            .spec()
+            .post('/auth/signin')
+            .withBody({
+              email: 'wrong@email.com',
+              password: '123',
+            })
+            .expectStatus(403)
+            .expectBodyContains('email is incorrect');
+        });
+        it('should throw 403 (incorrect password)', () => {
+          return pactum
+            .spec()
+            .post('/auth/signin')
+            .withBody({
+              email: 'test@test.com',
+              password: 'wrongpassword',
+            })
+            .expectStatus(403)
+            .expectBodyContains('password is incorrect');
+        });
+
+        it('should throw 400 (should not be empty)', () => {
+          return pactum
+            .spec()
+            .post('/auth/signin')
+            .withBody({
+              name: '',
+              password: '',
+            })
+            .expectStatus(400)
+            .expectBodyContains('email should not be empty')
+            .expectBodyContains('password should not be empty');
+        });
+
+        it('should throw 400 (values type error)', () => {
+          return pactum
+            .spec()
+            .post('/auth/signin')
+            .withBody({
+              email: 1,
+              password: 1,
+            })
+            .expectStatus(400)
+            .expectBodyContains('email must be an email')
+            .expectBodyContains('password must be a string');
+        });
+      });
+    });
+  });
+
   describe('\x1b[45m-User\x1b[0m', () => {
     describe('Get me', () => {
       it.todo('should get user');
