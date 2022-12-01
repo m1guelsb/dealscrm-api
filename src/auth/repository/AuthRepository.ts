@@ -38,7 +38,7 @@ export class AuthRepository implements iAuthRepository {
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
-          throw new ForbiddenException('Email already registred');
+          throw new ForbiddenException('email already registred');
         }
       }
       throw error;
@@ -50,10 +50,10 @@ export class AuthRepository implements iAuthRepository {
       where: { email: dto.email },
     });
 
-    if (!user) throw new ForbiddenException('Email is incorrect');
+    if (!user) throw new ForbiddenException('email is incorrect');
 
     const passwordMatches = await argon.verify(user.password, dto.password);
-    if (!passwordMatches) throw new ForbiddenException('Password is incorrect');
+    if (!passwordMatches) throw new ForbiddenException('password is incorrect');
 
     return this.signToken(user.id, user.email);
   }
