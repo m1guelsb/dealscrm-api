@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SigninDtoInput, SignupDtoInput } from 'src/auth/dto';
+import { EditUserDto } from 'src/user/dto/editUser.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -32,12 +33,17 @@ describe('App e2e', () => {
     app.close();
   });
 
-  describe('\x1b[44m-Auth\x1b[0m', () => {
-    const signupDto: SignupDtoInput = {
-      email: 'test@test.com',
-      name: 'test name',
-      password: '123',
-    };
+  const signupDto: SignupDtoInput = {
+    email: 'test@test.com',
+    name: 'test name',
+    password: '123',
+  };
+  const signinDto: SigninDtoInput = {
+    email: 'test@test.com',
+    password: '123',
+  };
+
+  describe('\x1b[42m-Auth\x1b[0m', () => {
     describe('Signup', () => {
       it('should signup', () => {
         return pactum
@@ -89,17 +95,14 @@ describe('App e2e', () => {
       });
     });
 
-    const signinDto: SigninDtoInput = {
-      email: 'test@test.com',
-      password: '123',
-    };
     describe('Signin', () => {
       it('should signin', () => {
         return pactum
           .spec()
           .post('/auth/signin')
           .withBody(signinDto)
-          .expectStatus(200);
+          .expectStatus(200)
+          .stores('access_token', 'access_token');
       });
 
       describe('signin exceptions', () => {
@@ -109,7 +112,7 @@ describe('App e2e', () => {
             .post('/auth/signin')
             .withBody({
               email: 'wrong@email.com',
-              password: '123',
+              password: signinDto.password,
             })
             .expectStatus(403)
             .expectBodyContains('email is incorrect');
@@ -119,7 +122,7 @@ describe('App e2e', () => {
             .spec()
             .post('/auth/signin')
             .withBody({
-              email: 'test@test.com',
+              email: signinDto.email,
               password: 'wrongpassword',
             })
             .expectStatus(403)
@@ -155,12 +158,49 @@ describe('App e2e', () => {
     });
   });
 
-  describe('\x1b[45m-User\x1b[0m', () => {
+  describe('\x1b[42m-User\x1b[0m', () => {
     describe('Get me', () => {
-      it.todo('should get user');
+      it('should get user', () => {
+        return pactum
+          .spec()
+          .get('/users/me')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectBodyContains(signinDto.email);
+      });
     });
     describe('Patch me', () => {
-      it.todo('should edit user');
+      const editUserDto: EditUserDto = {
+        email: 'edit@test.com',
+        name: 'edited name',
+      };
+
+      it('should edit user', () => {
+        return pactum
+          .spec()
+          .patch('/users/me')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(editUserDto)
+          .expectStatus(200)
+          .expectBodyContains(editUserDto.email)
+          .expectBodyContains(editUserDto.name);
+      });
+
+      describe('edit user exceptions', () => {
+        it('should throw 400 (values type error)', () => {
+          return pactum
+            .spec()
+            .patch('/users/me')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .withBody({
+              email: 1,
+              name: 1,
+            })
+            .expectStatus(400)
+            .expectBodyContains('email must be an email')
+            .expectBodyContains('name must be a string');
+        });
+      });
     });
   });
 
