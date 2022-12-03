@@ -27,4 +27,9 @@ export class CustomerController {
     return this.customerService.createCustomer(userId, dto);
   }
 
+  @Get()
+  findAllCustomers(@GetUser('id') userId: string) {
+    return this.customerService.findAllCustomers(userId);
+  }
+
 }
