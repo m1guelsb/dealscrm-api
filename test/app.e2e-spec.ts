@@ -7,6 +7,7 @@ import { SigninDtoInput, SignupDtoInput } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto/editUser.dto';
 import { CreateCustomerDto } from 'src/customer/dto/create-customer.dto';
 import { UpdateCustomerDto } from 'src/customer/dto/update-customer.dto';
+import { CreateDealDto } from 'src/deal/dto/create-deal.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -386,8 +387,60 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Deal\x1b[0m', () => {
-    describe('Post deal', () => {
-      it.todo('should create a deal');
+    pactum.handler.addCaptureHandler('deal', (ctx) => {
+      return ctx.res.body;
+    });
+    describe('Create a customer deal', () => {
+      const createDealDto: CreateDealDto = {
+        title: 'test deal',
+        description: 'test description',
+        price: 69,
+      };
+
+      it('should create a customer deal', () => {
+        return pactum
+          .spec()
+          .post('/deals')
+          .withHeaders({
+            Authorization: 'Bearer $S{access_token}',
+            customerId: '$S{customer.id}',
+          })
+          .withBody(createDealDto)
+          .expectStatus(201)
+          .stores('dealData', '#deal');
+      });
+
+      describe('create deal exceptions', () => {
+        it('should throw 400 (empty values error)', () => {
+          return pactum
+            .spec()
+            .post('/deals')
+            .withHeaders({
+              Authorization: 'Bearer $S{access_token}',
+              customerId: '$S{customer.id}',
+            })
+            .withBody({
+              title: '',
+              description: '',
+              price: undefined,
+            })
+            .expectStatus(400)
+            .expectBodyContains('title should not be empty')
+            .expectBodyContains('description should not be empty')
+            .expectBodyContains('price should not be empty');
+        });
+
+        it('should throw 422 (customer id header not provided)', () => {
+          return pactum
+            .spec()
+            .post('/deals')
+            .withHeaders({
+              Authorization: 'Bearer $S{access_token}',
+            })
+            .withBody(createDealDto)
+            .expectStatus(422);
+        });
+      });
     });
 
     describe('Get deals', () => {
