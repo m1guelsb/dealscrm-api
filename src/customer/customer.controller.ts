@@ -32,4 +32,12 @@ export class CustomerController {
     return this.customerService.findAllCustomers(userId);
   }
 
+  @Get(':customerId')
+  findOneCustomer(
+    @GetUser('id') userId: string,
+    @Param('customerId') customerId: string,
+  ) {
+    return this.customerService.findOneCustomer(userId, customerId);
+  }
+
 }

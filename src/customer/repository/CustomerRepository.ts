@@ -36,4 +36,21 @@ export class CustomerRepository implements iCustomerRepository {
     return customersList;
   }
 
+  async findOneCustomer(
+    userId: string,
+    customerId: string,
+  ): Promise<CustomerEntity> {
+    const customer = await this.prisma.customer.findFirst({
+      where: {
+        id: customerId,
+        userId,
+      },
+    });
+
+    if (!customer || customer.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    return customer;
+  }
+
 }

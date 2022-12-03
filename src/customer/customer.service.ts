@@ -15,4 +15,8 @@ export class CustomerService {
     return this.customerRepository.findAllCustomers(userId);
   }
 
+  findOneCustomer(userId: string, customerId: string) {
+    return this.customerRepository.findOneCustomer(userId, customerId);
+  }
+
 }
