@@ -49,4 +49,11 @@ export class CustomerController {
     return this.customerService.editCustomer(userId, customerId, dto);
   }
 
+  @Delete(':customerId')
+  deleteCustomer(
+    @GetUser('id') userId: string,
+    @Param('customerId') customerId: string,
+  ) {
+    return this.customerService.deleteCustomer(userId, customerId);
+  }
 }

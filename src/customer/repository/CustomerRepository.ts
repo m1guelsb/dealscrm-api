@@ -79,4 +79,20 @@ export class CustomerRepository implements iCustomerRepository {
     return editedCustomer;
   }
 
+  async deleteCustomer(userId: string, customerId: string) {
+    const customer = await this.prisma.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+
+    if (!customer || customer.userId !== userId)
+      throw new ForbiddenException('Access to resource denied');
+
+    await this.prisma.customer.delete({
+      where: {
+        id: customerId,
+      },
+    });
+  }
 }

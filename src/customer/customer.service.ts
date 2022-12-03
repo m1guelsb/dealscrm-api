@@ -23,4 +23,7 @@ export class CustomerService {
     return this.customerRepository.editCustomer(userId, customerId, dto);
   }
 
+  deleteCustomer(userId: string, customerId: string) {
+    return this.customerRepository.deleteCustomer(userId, customerId);
+  }
 }
