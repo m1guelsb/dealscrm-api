@@ -271,8 +271,28 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Patch customer', () => {
-      it.todo('should edit a customer');
+    describe('Find one customer by id', () => {
+      it('should find one customer', () => {
+        return pactum
+          .spec()
+          .get('/customers/{customerId}')
+          .withPathParams('customerId', '$S{customerData.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectBody('$S{customerData}');
+      });
+      describe('find one customer exceptions', () => {
+        it('should throw 301 (access denied)', () => {
+          return pactum
+            .spec()
+            .get('/customers/{customerId}')
+            .withPathParams('customerId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(403);
+        });
+      });
+    });
+
     });
 
     describe('Delete customer', () => {
