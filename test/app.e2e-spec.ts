@@ -5,6 +5,7 @@ import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SigninDtoInput, SignupDtoInput } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto/editUser.dto';
+import { CreateCustomerDto } from 'src/customer/dto/createCustomer.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -159,7 +160,7 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[42m-User\x1b[0m', () => {
-    describe('Get me', () => {
+    describe('Find me', () => {
       it('should get user', () => {
         return pactum
           .spec()
@@ -169,7 +170,7 @@ describe('App e2e', () => {
           .expectBodyContains(signinDto.email);
       });
     });
-    describe('Patch me', () => {
+    describe('Edit me', () => {
       const editUserDto: EditUserDto = {
         email: 'edit@test.com',
         name: 'edited name',
@@ -186,7 +187,7 @@ describe('App e2e', () => {
           .expectBodyContains(editUserDto.name);
       });
 
-      describe('edit user exceptions', () => {
+      describe('edit me exceptions', () => {
         it('should throw 400 (values type error)', () => {
           return pactum
             .spec()
@@ -205,12 +206,58 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Customer\x1b[0m', () => {
-    describe('Post customer', () => {
-      it.todo('should create a customer');
-    });
+    const createCustomerDto: CreateCustomerDto = {
+      name: 'test customer',
+      email: 'customer@test.com',
+      phone: '1234567890',
+    };
 
-    describe('Get customers', () => {
-      it.todo('should list many customers');
+    pactum.handler.addCaptureHandler('customer', (ctx) => {
+      return ctx.res.body;
+    });
+    describe('Create customer', () => {
+      it('should create a customer', () => {
+        return pactum
+          .spec()
+          .post('/customers')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(createCustomerDto)
+          .expectStatus(201)
+          .stores('customerData', '#customer');
+      });
+
+      describe('create customer exceptions', () => {
+        it('should throw 400 (empty values error)', () => {
+          return pactum
+            .spec()
+            .post('/customers')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .withBody({
+              name: '',
+              email: '',
+              phone: '',
+            })
+            .expectStatus(400)
+            .expectBodyContains('name should not be empty')
+            .expectBodyContains('email should not be empty')
+            .expectBodyContains('phone should not be empty');
+        });
+        it('should throw 400 (values type error)', () => {
+          return pactum
+            .spec()
+            .post('/customers')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .withBody({
+              email: 1,
+              name: 1,
+              phone: 1,
+            })
+            .expectStatus(400)
+            .expectBodyContains('email must be an email')
+            .expectBodyContains('name must be a string')
+            .expectBodyContains('phone must be a string');
+        });
+      });
     });
 
     describe('Get customer by id', () => {
