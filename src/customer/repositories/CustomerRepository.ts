@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { DealEntity } from 'src/deal/entities/deal.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { UpdateCustomerDto } from '../dto/update-customer.dto';
@@ -51,6 +56,27 @@ export class CustomerRepository implements iCustomerRepository {
       throw new ForbiddenException('access to resource denied');
 
     return customer;
+  }
+
+  async findCustomerAllDeals(customerId: string): Promise<DealEntity[]> {
+    const customer = await this.prisma.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+
+    if (!customer)
+      throw new NotFoundException(
+        'customer with the provided id does not exists',
+      );
+
+    const customerDealsList = await this.prisma.deal.findMany({
+      where: {
+        customerId,
+      },
+    });
+
+    return customerDealsList;
   }
 
   async editCustomer(

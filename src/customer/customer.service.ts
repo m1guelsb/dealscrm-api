@@ -19,6 +19,10 @@ export class CustomerService {
     return this.customerRepository.findOneCustomer(userId, customerId);
   }
 
+  findCustomerAllDeals(customerId: string) {
+    return this.customerRepository.findCustomerAllDeals(customerId);
+  }
+
   editCustomer(userId: string, customerId: string, dto: UpdateCustomerDto) {
     return this.customerRepository.editCustomer(userId, customerId, dto);
   }

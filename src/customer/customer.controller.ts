@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UnprocessableEntityException,
   UseGuards,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
@@ -40,12 +41,21 @@ export class CustomerController {
     return this.customerService.findOneCustomer(userId, customerId);
   }
 
+  @Get(':customerId/deals')
+  findCustomerDeals(@Param('customerId') customerId: string) {
+    return this.customerService.findCustomerAllDeals(customerId);
+  }
+
   @Patch(':customerId')
   editCustomer(
     @GetUser('id') userId: string,
     @Param('customerId') customerId: string,
     @Body() dto: UpdateCustomerDto,
   ) {
+    if (!customerId)
+      throw new UnprocessableEntityException(
+        '{ customerId: string } header is required',
+      );
     return this.customerService.editCustomer(userId, customerId, dto);
   }
 
