@@ -260,8 +260,15 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get customer by id', () => {
-      it.todo('should get one customer');
+    describe('Find all customers', () => {
+      it('should find all customer', () => {
+        return pactum
+          .spec()
+          .get('/customers')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectJsonLength(1);
+      });
     });
 
     describe('Patch customer', () => {
