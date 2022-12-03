@@ -212,7 +212,15 @@ describe('App e2e', () => {
       email: 'customer@test.com',
       phone: '1234567890',
     };
+    const secondCustomer: CreateCustomerDto = {
+      name: 'customer',
+      email: 'customer@test.com',
+      phone: '1234567890',
+    };
 
+    pactum.handler.addCaptureHandler('testCustomer', (ctx) => {
+      return ctx.res.body;
+    });
     pactum.handler.addCaptureHandler('customer', (ctx) => {
       return ctx.res.body;
     });
@@ -224,7 +232,16 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .withBody(createCustomerDto)
           .expectStatus(201)
-          .stores('customerData', '#customer');
+          .stores('testCustomer', '#testCustomer');
+      });
+      it('should create a second customer', () => {
+        return pactum
+          .spec()
+          .post('/customers')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(secondCustomer)
+          .expectStatus(201)
+          .stores('customer', '#customer');
       });
 
       describe('create customer exceptions', () => {
@@ -268,7 +285,7 @@ describe('App e2e', () => {
           .get('/customers')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .expectStatus(200)
-          .expectJsonLength(1);
+          .expectJsonLength(2);
       });
     });
 
@@ -277,10 +294,10 @@ describe('App e2e', () => {
         return pactum
           .spec()
           .get('/customers/{customerId}')
-          .withPathParams('customerId', '$S{customerData.id}')
+          .withPathParams('customerId', '$S{testCustomer.id}')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .expectStatus(200)
-          .expectBody('$S{customerData}');
+          .expectBody('$S{testCustomer}');
       });
       describe('find one customer exceptions', () => {
         it('should throw 301 (access denied)', () => {
@@ -290,6 +307,27 @@ describe('App e2e', () => {
             .withPathParams('customerId', 'wrong-id')
             .withHeaders({ Authorization: 'Bearer $S{access_token}' })
             .expectStatus(403);
+        });
+      });
+    });
+    describe('Find one customer all deals', () => {
+      it('should find customer all deals', () => {
+        return pactum
+          .spec()
+          .get('/customers/{customerId}/deals')
+          .withPathParams('customerId', '$S{testCustomer.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+      describe('find customer all deals exceptions', () => {
+        it('should throw 404 (customer not found)', () => {
+          return pactum
+            .spec()
+            .get('/customers/{customerId}/deals')
+            .withPathParams('customerId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
         });
       });
     });
@@ -305,7 +343,7 @@ describe('App e2e', () => {
         return pactum
           .spec()
           .patch('/customers/{customerId}')
-          .withPathParams('customerId', '$S{customerData.id}')
+          .withPathParams('customerId', '$S{testCustomer.id}')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .withBody(updateCustomerDto)
           .expectStatus(200)
@@ -329,7 +367,7 @@ describe('App e2e', () => {
         return pactum
           .spec()
           .delete('/customers/{customerId}')
-          .withPathParams('customerId', '$S{customerData.id}')
+          .withPathParams('customerId', '$S{testCustomer.id}')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .expectStatus(200);
       });
