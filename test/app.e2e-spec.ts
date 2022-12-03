@@ -325,7 +325,26 @@ describe('App e2e', () => {
     });
 
     describe('Delete customer', () => {
-      it.todo('should delete a customer');
+      it('should delete one customer', () => {
+        return pactum
+          .spec()
+          .delete('/customers/{customerId}')
+          .withPathParams('customerId', '$S{customerData.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .inspect();
+      });
+
+      describe('delete one customer exceptions', () => {
+        it('should throw 301 (access denied)', () => {
+          return pactum
+            .spec()
+            .get('/customers/{customerId}')
+            .withPathParams('customerId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(403);
+        });
+      });
     });
   });
 
