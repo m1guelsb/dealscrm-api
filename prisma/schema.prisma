@@ -17,6 +17,8 @@ model User {
   password String
 
   customers Customer[]
+
+  @@map("users")
 }
 
 model Customer {
@@ -32,6 +34,8 @@ model Customer {
   user   User   @relation(fields: [userId], references: [id])
 
   deals Deal[]
+
+  @@map("customers")
 }
 
 model Deal {
@@ -47,6 +51,8 @@ model Deal {
   customer   Customer @relation(fields: [customerId], references: [id])
 
   tasks Task[]
+
+  @@map("deals")
 }
 
 model Task {
@@ -60,4 +66,6 @@ model Task {
 
   dealId String
   deal   Deal   @relation(fields: [dealId], references: [id])
+
+  @@map("tasks")
 }
