@@ -53,4 +53,30 @@ export class CustomerRepository implements iCustomerRepository {
     return customer;
   }
 
+  async editCustomer(
+    userId: string,
+    customerId: string,
+    dto: EditCustomerDto,
+  ): Promise<CustomerEntity> {
+    const customer = await this.prisma.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+
+    if (!customer || customer.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    const editedCustomer = await this.prisma.customer.update({
+      where: {
+        id: customerId,
+      },
+      data: {
+        ...dto,
+      },
+    });
+
+    return editedCustomer;
+  }
+
 }

@@ -40,4 +40,13 @@ export class CustomerController {
     return this.customerService.findOneCustomer(userId, customerId);
   }
 
+  @Patch(':customerId')
+  editCustomer(
+    @GetUser('id') userId: string,
+    @Param('customerId') customerId: string,
+    @Body() dto: EditCustomerDto,
+  ) {
+    return this.customerService.editCustomer(userId, customerId, dto);
+  }
+
 }
