@@ -5,8 +5,8 @@ import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SigninDtoInput, SignupDtoInput } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto/editUser.dto';
-import { CreateCustomerDto } from 'src/customer/dto/createCustomer.dto';
-import { EditCustomerDto } from 'src/customer/dto/editCustomer.dto';
+import { CreateCustomerDto } from 'src/customer/dto/create-customer.dto';
+import { UpdateCustomerDto } from 'src/customer/dto/update-customer.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -206,7 +206,7 @@ describe('App e2e', () => {
     });
   });
 
-  describe('\x1b[45m-Customer\x1b[0m', () => {
+  describe('\x1b[42m-Customer\x1b[0m', () => {
     const createCustomerDto: CreateCustomerDto = {
       name: 'test customer',
       email: 'customer@test.com',
@@ -295,7 +295,7 @@ describe('App e2e', () => {
     });
 
     describe('Edit customer', () => {
-      const editCustomerDto: EditCustomerDto = {
+      const updateCustomerDto: UpdateCustomerDto = {
         name: 'edited customer',
         email: 'edit@customer.com',
         phone: '1111111111',
@@ -307,9 +307,9 @@ describe('App e2e', () => {
           .patch('/customers/{customerId}')
           .withPathParams('customerId', '$S{customerData.id}')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
-          .withBody(editCustomerDto)
+          .withBody(updateCustomerDto)
           .expectStatus(200)
-          .expectBodyContains(editCustomerDto.name);
+          .expectBodyContains(updateCustomerDto.name);
       });
 
       describe('edit one customer exceptions', () => {
@@ -331,8 +331,7 @@ describe('App e2e', () => {
           .delete('/customers/{customerId}')
           .withPathParams('customerId', '$S{customerData.id}')
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
-          .expectStatus(200)
-          .inspect();
+          .expectStatus(200);
       });
 
       describe('delete one customer exceptions', () => {

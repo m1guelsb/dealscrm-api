@@ -1,6 +1,7 @@
 import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { CreateCustomerDto } from './create-customer.dto';
 
-export class EditCustomerDto {
+export class UpdateCustomerDto implements Partial<CreateCustomerDto> {
   @IsString()
   @IsOptional()
   name?: string;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from './dto/createCustomer.dto';
-import { EditCustomerDto } from './dto/editCustomer.dto';
-import { CustomerRepository } from './repository/CustomerRepository';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { CustomerRepository } from './repositories/CustomerRepository';
 
 @Injectable()
 export class CustomerService {
@@ -19,7 +19,7 @@ export class CustomerService {
     return this.customerRepository.findOneCustomer(userId, customerId);
   }
 
-  editCustomer(userId: string, customerId: string, dto: EditCustomerDto) {
+  editCustomer(userId: string, customerId: string, dto: UpdateCustomerDto) {
     return this.customerRepository.editCustomer(userId, customerId, dto);
   }
 

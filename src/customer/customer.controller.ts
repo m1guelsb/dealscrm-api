@@ -11,8 +11,8 @@ import {
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { CustomerService } from './customer.service';
-import { CreateCustomerDto } from './dto/createCustomer.dto';
-import { EditCustomerDto } from './dto/editCustomer.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @UseGuards(JwtGuard)
 @Controller('customers')
@@ -44,7 +44,7 @@ export class CustomerController {
   editCustomer(
     @GetUser('id') userId: string,
     @Param('customerId') customerId: string,
-    @Body() dto: EditCustomerDto,
+    @Body() dto: UpdateCustomerDto,
   ) {
     return this.customerService.editCustomer(userId, customerId, dto);
   }

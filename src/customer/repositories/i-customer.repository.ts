@@ -1,6 +1,6 @@
 import { Customer } from '@prisma/client';
-import { CreateCustomerDto } from '../dto/createCustomer.dto';
-import { EditCustomerDto } from '../dto/editCustomer.dto';
+import { CreateCustomerDto } from '../dto/create-customer.dto';
+import { UpdateCustomerDto } from '../dto/update-customer.dto';
 
 export interface iCustomerRepository {
   createCustomer: (userId: string, dto: CreateCustomerDto) => Promise<Customer>;
@@ -12,7 +12,7 @@ export interface iCustomerRepository {
   editCustomer: (
     userId: string,
     customerId: string,
-    dto: EditCustomerDto,
+    dto: UpdateCustomerDto,
   ) => Promise<Customer>;
 
   deleteCustomer: (userId: string, customerId: string) => void;

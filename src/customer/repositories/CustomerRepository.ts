@@ -1,9 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCustomerDto } from '../dto/createCustomer.dto';
-import { EditCustomerDto } from '../dto/editCustomer.dto';
-import { CustomerEntity } from '../entity/customer.entity';
-import { iCustomerRepository } from './icustomer.repository';
+import { CreateCustomerDto } from '../dto/create-customer.dto';
+import { UpdateCustomerDto } from '../dto/update-customer.dto';
+import { CustomerEntity } from '../entities/customer.entity';
+import { iCustomerRepository } from './i-customer.repository';
 
 @Injectable()
 export class CustomerRepository implements iCustomerRepository {
@@ -56,7 +56,7 @@ export class CustomerRepository implements iCustomerRepository {
   async editCustomer(
     userId: string,
     customerId: string,
-    dto: EditCustomerDto,
+    dto: UpdateCustomerDto,
   ): Promise<CustomerEntity> {
     const customer = await this.prisma.customer.findUnique({
       where: {
