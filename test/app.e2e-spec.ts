@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { SigninDtoInput, SignupDtoInput } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto/editUser.dto';
 import { CreateCustomerDto } from 'src/customer/dto/createCustomer.dto';
+import { EditCustomerDto } from 'src/customer/dto/editCustomer.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -293,6 +294,34 @@ describe('App e2e', () => {
       });
     });
 
+    describe('Edit customer', () => {
+      const editCustomerDto: EditCustomerDto = {
+        name: 'edited customer',
+        email: 'edit@customer.com',
+        phone: '1111111111',
+      };
+
+      it('should edit one customer', () => {
+        return pactum
+          .spec()
+          .patch('/customers/{customerId}')
+          .withPathParams('customerId', '$S{customerData.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(editCustomerDto)
+          .expectStatus(200)
+          .expectBodyContains(editCustomerDto.name);
+      });
+
+      describe('edit one customer exceptions', () => {
+        it('should throw 301 (access denied)', () => {
+          return pactum
+            .spec()
+            .get('/customers/{customerId}')
+            .withPathParams('customerId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(403);
+        });
+      });
     });
 
     describe('Delete customer', () => {
