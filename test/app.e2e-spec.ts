@@ -387,17 +387,26 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Deal\x1b[0m', () => {
+    pactum.handler.addCaptureHandler('testDeal', (ctx) => {
+      return ctx.res.body;
+    });
     pactum.handler.addCaptureHandler('deal', (ctx) => {
       return ctx.res.body;
     });
+
     describe('Create a customer deal', () => {
       const createDealDto: CreateDealDto = {
         title: 'test deal',
         description: 'test description',
         price: 69,
       };
+      const dealDto: CreateDealDto = {
+        title: 'deal',
+        description: 'deal description',
+        price: 10,
+      };
 
-      it('should create a customer deal', () => {
+      it('should create a test customer deal', () => {
         return pactum
           .spec()
           .post('/deals')
@@ -407,7 +416,19 @@ describe('App e2e', () => {
           })
           .withBody(createDealDto)
           .expectStatus(201)
-          .stores('dealData', '#deal');
+          .stores('testDeal', '#testDeal');
+      });
+      it('should create a customer deal', () => {
+        return pactum
+          .spec()
+          .post('/deals')
+          .withHeaders({
+            Authorization: 'Bearer $S{access_token}',
+            customerId: '$S{customer.id}',
+          })
+          .withBody(dealDto)
+          .expectStatus(201)
+          .stores('deal', '#deal');
       });
 
       describe('create deal exceptions', () => {
@@ -443,8 +464,15 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get deals', () => {
-      it.todo('should list many deals');
+    describe('Find all deals', () => {
+      it('should find all deals', () => {
+        return pactum
+          .spec()
+          .get('/deals')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectJsonLength(2);
+      });
     });
 
     describe('Get deal by id', () => {
