@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateDealDto } from '../dto/create-deal.dto';
 import { DealEntity } from '../entities/deal.entity';
@@ -41,6 +45,9 @@ export class DealRepository implements iDealRepository {
         userId,
       },
     });
+
+    if (!!dealsList.length && dealsList[0].userId !== userId)
+      throw new ForbiddenException('access to resource denied');
 
     return dealsList;
   }

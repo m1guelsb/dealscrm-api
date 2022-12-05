@@ -35,7 +35,7 @@ export class CustomerRepository implements iCustomerRepository {
       },
     });
 
-    if (customersList && customersList[0].userId !== userId)
+    if (!!customersList.length && customersList[0]?.userId !== userId)
       throw new ForbiddenException('access to resource denied');
 
     return customersList;

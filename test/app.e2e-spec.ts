@@ -208,6 +208,15 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[42m-Customer\x1b[0m', () => {
+    it('should return empty customers array', () => {
+      return pactum
+        .spec()
+        .get('/customers')
+        .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+        .expectStatus(200)
+        .expectBody([]);
+    });
+
     const createCustomerDto: CreateCustomerDto = {
       name: 'test customer',
       email: 'customer@test.com',
@@ -387,6 +396,15 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Deal\x1b[0m', () => {
+    it('should return empty deals array', () => {
+      return pactum
+        .spec()
+        .get('/deals')
+        .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+        .expectStatus(200)
+        .expectBody([]);
+    });
+
     pactum.handler.addCaptureHandler('testDeal', (ctx) => {
       return ctx.res.body;
     });
