@@ -5,6 +5,7 @@ import {
   UseGuards,
   UnprocessableEntityException,
   Headers,
+  Get,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -27,5 +28,10 @@ export class DealController {
         '{ customerId: string } header is required',
       );
     return this.dealService.createDeal(userId, customerId, dto);
+  }
+
+  @Get()
+  findAllDeals(@GetUser('id') userId: string) {
+    return this.dealService.findAllDeals(userId);
   }
 }

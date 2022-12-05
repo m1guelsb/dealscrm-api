@@ -7,4 +7,6 @@ export interface iDealRepository {
     customerId: string,
     dto: CreateDealDto,
   ) => Promise<DealEntity>;
+
+  findAllDeals: (userId: string) => Promise<DealEntity[]>;
 }

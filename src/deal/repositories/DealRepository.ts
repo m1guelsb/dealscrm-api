@@ -34,4 +34,14 @@ export class DealRepository implements iDealRepository {
 
     return new DealEntity(newDeal);
   }
+
+  async findAllDeals(userId: string): Promise<DealEntity[]> {
+    const dealsList = await this.prisma.deal.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return dealsList;
+  }
 }

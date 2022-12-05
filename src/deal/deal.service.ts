@@ -9,4 +9,8 @@ export class DealService {
   createDeal(userId: string, customerId: string, dto: CreateDealDto) {
     return this.dealRepository.createDeal(userId, customerId, dto);
   }
+
+  findAllDeals(userId: string) {
+    return this.dealRepository.findAllDeals(userId);
+  }
 }
