@@ -9,6 +9,7 @@ export class DealRepository implements iDealRepository {
   constructor(private prisma: PrismaService) {}
 
   async createDeal(
+    userId: string,
     customerId: string,
     dto: CreateDealDto,
   ): Promise<DealEntity> {
@@ -25,6 +26,7 @@ export class DealRepository implements iDealRepository {
 
     const newDeal = await this.prisma.deal.create({
       data: {
+        userId,
         customerId,
         ...dto,
       },

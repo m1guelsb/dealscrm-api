@@ -6,7 +6,7 @@ import { DealRepository } from './repositories/DealRepository';
 export class DealService {
   constructor(private dealRepository: DealRepository) {}
 
-  createDeal(customerId: string, dto: CreateDealDto) {
-    return this.dealRepository.createDeal(customerId, dto);
+  createDeal(userId: string, customerId: string, dto: CreateDealDto) {
+    return this.dealRepository.createDeal(userId, customerId, dto);
   }
 }
