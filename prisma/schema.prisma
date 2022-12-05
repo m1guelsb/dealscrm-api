@@ -17,6 +17,8 @@ model User {
   password String
 
   customers Customer[]
+  Deal      Deal[]
+  Task      Task[]
 
   @@map("users")
 }
@@ -47,6 +49,9 @@ model Deal {
   description String
   price       Int
 
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id])
 
@@ -63,6 +68,9 @@ model Task {
   title       String
   dueDate     DateTime
   isCompleted Boolean  @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   dealId String
   deal   Deal   @relation(fields: [dealId], references: [id])
