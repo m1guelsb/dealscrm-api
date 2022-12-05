@@ -413,7 +413,7 @@ describe('App e2e', () => {
     });
 
     describe('Create a customer deal', () => {
-      const createDealDto: CreateDealDto = {
+      const testDealDto: CreateDealDto = {
         title: 'test deal',
         description: 'test description',
         price: 69,
@@ -432,7 +432,7 @@ describe('App e2e', () => {
             Authorization: 'Bearer $S{access_token}',
             customerId: '$S{customer.id}',
           })
-          .withBody(createDealDto)
+          .withBody(testDealDto)
           .expectStatus(201)
           .stores('testDeal', '#testDeal');
       });
@@ -476,7 +476,7 @@ describe('App e2e', () => {
             .withHeaders({
               Authorization: 'Bearer $S{access_token}',
             })
-            .withBody(createDealDto)
+            .withBody(testDealDto)
             .expectStatus(422);
         });
       });
@@ -493,8 +493,24 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get deal by id', () => {
-      it.todo('should get one deal');
+    describe('Find one deal', () => {
+      it('should find one deal', () => {
+        return pactum
+          .spec()
+          .get('/deals/{dealId}')
+          .withPathParams('dealId', '$S{deal.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200);
+      });
+      describe('find one customer exceptions', () => {
+        it('should throw 404', () => {
+          return pactum
+            .spec()
+            .get('/deals/wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
 
     describe('Patch deal', () => {
