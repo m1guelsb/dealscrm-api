@@ -51,4 +51,20 @@ export class DealRepository implements iDealRepository {
 
     return dealsList;
   }
+
+  async findOneDeal(userId: string, dealId: string): Promise<DealEntity> {
+    const deal = await this.prisma.deal.findFirst({
+      where: {
+        id: dealId,
+        userId,
+      },
+    });
+    if (!deal)
+      throw new NotFoundException('deal with provided id does not exists');
+
+    if (deal && deal.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    return deal;
+  }
 }

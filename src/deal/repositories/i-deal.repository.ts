@@ -9,4 +9,6 @@ export interface iDealRepository {
   ) => Promise<DealEntity>;
 
   findAllDeals: (userId: string) => Promise<DealEntity[]>;
+
+  findOneDeal: (userId: string, dealId: string) => Promise<DealEntity>;
 }

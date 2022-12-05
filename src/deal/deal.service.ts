@@ -13,4 +13,8 @@ export class DealService {
   findAllDeals(userId: string) {
     return this.dealRepository.findAllDeals(userId);
   }
+
+  findOneDeal(userId: string, dealId: string) {
+    return this.dealRepository.findOneDeal(userId, dealId);
+  }
 }

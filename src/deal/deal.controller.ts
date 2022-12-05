@@ -6,6 +6,7 @@ import {
   UnprocessableEntityException,
   Headers,
   Get,
+  Param,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -33,5 +34,10 @@ export class DealController {
   @Get()
   findAllDeals(@GetUser('id') userId: string) {
     return this.dealService.findAllDeals(userId);
+  }
+
+  @Get(':dealId')
+  findOneDeal(@GetUser('id') userId: string, @Param('dealId') dealId: string) {
+    return this.dealService.findOneDeal(userId, dealId);
   }
 }
