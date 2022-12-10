@@ -545,7 +545,25 @@ describe('App e2e', () => {
     });
 
     describe('Delete deal', () => {
-      it.todo('should delete a deal');
+      it('should delete a deal', () => {
+        return pactum
+          .spec()
+          .delete('/deals/{dealId}')
+          .withPathParams('dealId', '$S{testDeal.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200);
+      });
+
+      describe('delete a deal exceptions', () => {
+        it('should throw 404 (resource not found)', () => {
+          return pactum
+            .spec()
+            .get('/deals/{dealId}')
+            .withPathParams('dealId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
   });
 
