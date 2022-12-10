@@ -8,6 +8,7 @@ import { EditUserDto } from 'src/user/dto/editUser.dto';
 import { CreateCustomerDto } from 'src/customer/dto/create-customer.dto';
 import { UpdateCustomerDto } from 'src/customer/dto/update-customer.dto';
 import { CreateDealDto } from 'src/deal/dto/create-deal.dto';
+import { UpdateDealDto } from 'src/deal/dto/update-deal.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -513,8 +514,34 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Patch deal', () => {
-      it.todo('should edit a deal');
+    describe('Update deal', () => {
+      const updateDealDto: UpdateDealDto = {
+        title: 'edited deal',
+        description: 'edit deal description',
+        price: 99,
+      };
+
+      it('should update one deal', () => {
+        return pactum
+          .spec()
+          .patch('/deals/{dealId}')
+          .withPathParams('dealId', '$S{testDeal.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(updateDealDto)
+          .expectStatus(200)
+          .expectBodyContains(updateDealDto.title);
+      });
+
+      describe('edit one deal exceptions', () => {
+        it('should throw 404 (resource not found)', () => {
+          return pactum
+            .spec()
+            .get('/deals/{dealId}')
+            .withPathParams('dealId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
 
     describe('Delete deal', () => {
