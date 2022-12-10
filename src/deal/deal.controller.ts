@@ -8,6 +8,7 @@ import {
   Get,
   Param,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -50,5 +51,10 @@ export class DealController {
     @Body() dto: UpdateDealDto,
   ) {
     return this.dealService.updateDeal(userId, dealId, dto);
+  }
+
+  @Delete(':dealId')
+  deleteDeal(@GetUser('id') userId: string, @Param('dealId') dealId: string) {
+    return this.dealService.deleteDeal(userId, dealId);
   }
 }

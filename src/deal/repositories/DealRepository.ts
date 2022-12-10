@@ -90,4 +90,21 @@ export class DealRepository implements iDealRepository {
 
     return editedDeal;
   }
+
+  async deleteDeal(userId: string, dealId: string) {
+    const deal = await this.prisma.deal.findUnique({
+      where: {
+        id: dealId,
+      },
+    });
+
+    if (deal.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    await this.prisma.deal.delete({
+      where: {
+        id: dealId,
+      },
+    });
+  }
 }

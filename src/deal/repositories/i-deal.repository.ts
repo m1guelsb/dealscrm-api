@@ -18,4 +18,6 @@ export interface iDealRepository {
     dealId: string,
     dto: UpdateDealDto,
   ) => Promise<DealEntity>;
+
+  deleteDeal: (userId: string, dealId: string) => void;
 }

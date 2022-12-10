@@ -22,4 +22,8 @@ export class DealService {
   updateDeal(userId: string, dealId: string, dto: UpdateDealDto) {
     return this.dealRepository.updateDeal(userId, dealId, dto);
   }
+
+  deleteDeal(userId: string, dealId: string) {
+    return this.dealRepository.deleteDeal(userId, dealId);
+  }
 }
