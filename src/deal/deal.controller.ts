@@ -7,11 +7,13 @@ import {
   Headers,
   Get,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
 import { DealService } from './deal.service';
 import { CreateDealDto } from './dto/create-deal.dto';
+import { UpdateDealDto } from './dto/update-deal.dto';
 
 @UseGuards(JwtGuard)
 @Controller('deals')
@@ -39,5 +41,14 @@ export class DealController {
   @Get(':dealId')
   findOneDeal(@GetUser('id') userId: string, @Param('dealId') dealId: string) {
     return this.dealService.findOneDeal(userId, dealId);
+  }
+
+  @Patch(':dealId')
+  updateDeal(
+    @GetUser('id') userId: string,
+    @Param('dealId') dealId: string,
+    @Body() dto: UpdateDealDto,
+  ) {
+    return this.dealService.updateDeal(userId, dealId, dto);
   }
 }

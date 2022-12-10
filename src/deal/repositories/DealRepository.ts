@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateDealDto } from '../dto/create-deal.dto';
+import { UpdateDealDto } from '../dto/update-deal.dto';
 import { DealEntity } from '../entities/deal.entity';
 import { iDealRepository } from './i-deal.repository';
 
@@ -66,5 +67,27 @@ export class DealRepository implements iDealRepository {
       throw new ForbiddenException('access to resource denied');
 
     return deal;
+  }
+
+  async updateDeal(userId: string, dealId: string, dto: UpdateDealDto) {
+    const deal = await this.prisma.deal.findUnique({
+      where: {
+        id: dealId,
+      },
+    });
+
+    if (deal.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    const editedDeal = await this.prisma.deal.update({
+      where: {
+        id: dealId,
+      },
+      data: {
+        ...dto,
+      },
+    });
+
+    return editedDeal;
   }
 }

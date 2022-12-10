@@ -1,4 +1,5 @@
 import { CreateDealDto } from '../dto/create-deal.dto';
+import { UpdateDealDto } from '../dto/update-deal.dto';
 import { DealEntity } from '../entities/deal.entity';
 
 export interface iDealRepository {
@@ -11,4 +12,10 @@ export interface iDealRepository {
   findAllDeals: (userId: string) => Promise<DealEntity[]>;
 
   findOneDeal: (userId: string, dealId: string) => Promise<DealEntity>;
+
+  updateDeal: (
+    userId: string,
+    dealId: string,
+    dto: UpdateDealDto,
+  ) => Promise<DealEntity>;
 }

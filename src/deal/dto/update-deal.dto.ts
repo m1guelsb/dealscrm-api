@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateDealDto } from './create-deal.dto';
 
 export class UpdateDealDto implements Partial<CreateDealDto> {
@@ -10,9 +10,7 @@ export class UpdateDealDto implements Partial<CreateDealDto> {
   @IsOptional()
   description: string;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
   price: number;
-
-  a: string;
 }
