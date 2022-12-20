@@ -6,6 +6,7 @@ import {
   UnprocessableEntityException,
   Headers,
   Get,
+  Param,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -33,5 +34,10 @@ export class TaskController {
   @Get()
   findAllTasks(@GetUser('id') userId: string) {
     return this.taskService.findAllTasks(userId);
+  }
+
+  @Get(':taskId')
+  findOneTask(@GetUser('id') userId: string, @Param('taskId') taskId: string) {
+    return this.taskService.findOneTask(userId, taskId);
   }
 }

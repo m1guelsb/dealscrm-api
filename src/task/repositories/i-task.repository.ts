@@ -10,7 +10,7 @@ export interface iTaskRepository {
 
   findAllTasks: (userId: string) => Promise<TaskEntity[]>;
 
-  // findOneTask: (userId: string, taskId: string) => Promise<TaskEntity>;
+  findOneTask: (userId: string, taskId: string) => Promise<TaskEntity>;
 
   // updateTask: (
   //   userId: string,

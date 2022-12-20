@@ -54,4 +54,21 @@ export class TaskRepository implements iTaskRepository {
 
     return tasksList;
   }
+
+  async findOneTask(userId: string, taskId: string): Promise<TaskEntity> {
+    const task = await this.prisma.task.findFirst({
+      where: {
+        id: taskId,
+        userId,
+      },
+    });
+
+    if (!task)
+      throw new NotFoundException('task with provided id does not exists');
+
+    if (task && task.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    return task;
+  }
 }

@@ -13,4 +13,8 @@ export class TaskService {
   findAllTasks(userId: string) {
     return this.taskRepository.findAllTasks(userId);
   }
+
+  findOneTask(userId: string, taskId: string) {
+    return this.taskRepository.findOneTask(userId, taskId);
+  }
 }
