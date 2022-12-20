@@ -398,7 +398,7 @@ describe('App e2e', () => {
     });
   });
 
-  describe('\x1b[45m-Deal\x1b[0m', () => {
+  describe('\x1b[42m-Deal\x1b[0m', () => {
     it('should return empty deals array', () => {
       return pactum
         .spec()
@@ -569,7 +569,7 @@ describe('App e2e', () => {
     });
   });
 
-  describe('\x1b[45m-Task\x1b[0m', () => {
+  describe('\x1b[42m-Task\x1b[0m', () => {
     it('should return empty tasks array', () => {
       return pactum
         .spec()
@@ -714,7 +714,25 @@ describe('App e2e', () => {
     });
 
     describe('Delete task', () => {
-      it.todo('should delete a task');
+      it('should delete a task', () => {
+        return pactum
+          .spec()
+          .delete('/tasks/{taskId}')
+          .withPathParams('taskId', '$S{testTask.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200);
+      });
+
+      describe('delete a task exceptions', () => {
+        it('should throw 404 (resource not found)', () => {
+          return pactum
+            .spec()
+            .get('/tasks/{taskId}')
+            .withPathParams('taskId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
   });
 });
