@@ -10,6 +10,7 @@ import { UpdateCustomerDto } from 'src/customer/dto/update-customer.dto';
 import { CreateDealDto } from 'src/deal/dto/create-deal.dto';
 import { UpdateDealDto } from 'src/deal/dto/update-deal.dto';
 import { CreateTaskDto } from 'src/task/dto/create-task.dto';
+import { UpdateTaskDto } from 'src/task/dto/update-task.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -682,8 +683,34 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Patch task', () => {
-      it.todo('should edit a task');
+    describe('Update task', () => {
+      const updateTaskDto: UpdateTaskDto = {
+        title: 'edited task',
+        dueDate: new Date(),
+        isCompleted: true,
+      };
+
+      it('should update one task', () => {
+        return pactum
+          .spec()
+          .patch('/tasks/{taskId}')
+          .withPathParams('taskId', '$S{testTask.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .withBody(updateTaskDto)
+          .expectStatus(200)
+          .expectBodyContains(updateTaskDto.title);
+      });
+
+      describe('edit one task exceptions', () => {
+        it('should throw 404 (resource not found)', () => {
+          return pactum
+            .spec()
+            .get('/tasks/{taskId}')
+            .withPathParams('taskId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
 
     describe('Delete task', () => {
