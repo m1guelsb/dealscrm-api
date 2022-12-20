@@ -9,6 +9,7 @@ import { CreateCustomerDto } from 'src/customer/dto/create-customer.dto';
 import { UpdateCustomerDto } from 'src/customer/dto/update-customer.dto';
 import { CreateDealDto } from 'src/deal/dto/create-deal.dto';
 import { UpdateDealDto } from 'src/deal/dto/update-deal.dto';
+import { CreateTaskDto } from 'src/task/dto/create-task.dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -568,8 +569,77 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Task\x1b[0m', () => {
-    describe('Post task', () => {
-      it.todo('should create a task');
+    pactum.handler.addCaptureHandler('testTask', (ctx) => {
+      return ctx.res.body;
+    });
+    pactum.handler.addCaptureHandler('task', (ctx) => {
+      return ctx.res.body;
+    });
+
+    describe('Create a deal task', () => {
+      const testTaskDto: CreateTaskDto = {
+        title: 'test task',
+        dueDate: new Date(),
+      };
+      const taskDto: CreateTaskDto = {
+        title: 'task',
+        dueDate: new Date(),
+      };
+
+      it('should create a test deal task', () => {
+        return pactum
+          .spec()
+          .post('/tasks')
+          .withHeaders({
+            Authorization: 'Bearer $S{access_token}',
+            dealId: '$S{deal.id}',
+          })
+          .withBody(testTaskDto)
+          .expectStatus(201)
+          .stores('testTask', '#testTask');
+      });
+      it('should create a deal task', () => {
+        return pactum
+          .spec()
+          .post('/tasks')
+          .withHeaders({
+            Authorization: 'Bearer $S{access_token}',
+            dealId: '$S{deal.id}',
+          })
+          .withBody(taskDto)
+          .expectStatus(201)
+          .stores('task', '#task');
+      });
+
+      describe('create deal exceptions', () => {
+        it('should throw 400 (empty values error)', () => {
+          return pactum
+            .spec()
+            .post('/tasks')
+            .withHeaders({
+              Authorization: 'Bearer $S{access_token}',
+              dealId: '$S{deal.id}',
+            })
+            .withBody({
+              title: '',
+              dueDate: '',
+            })
+            .expectStatus(400)
+            .expectBodyContains('title should not be empty')
+            .expectBodyContains('dueDate should not be empty');
+        });
+
+        it('should throw 422 (deal id header not provided)', () => {
+          return pactum
+            .spec()
+            .post('/tasks')
+            .withHeaders({
+              Authorization: 'Bearer $S{access_token}',
+            })
+            .withBody(testTaskDto)
+            .expectStatus(422);
+        });
+      });
     });
 
     describe('Get tasks', () => {
