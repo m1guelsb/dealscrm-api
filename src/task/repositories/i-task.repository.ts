@@ -19,5 +19,5 @@ export interface iTaskRepository {
     dto: UpdateTaskDto,
   ) => Promise<TaskEntity>;
 
-  // deleteTask: (userId: string, taskId: string) => void;
+  deleteTask: (userId: string, taskId: string) => void;
 }

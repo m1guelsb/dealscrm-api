@@ -19,7 +19,11 @@ export class TaskService {
     return this.taskRepository.findOneTask(userId, taskId);
   }
 
-  updateDeal(userId: string, taskId: string, dto: UpdateTaskDto) {
+  updateTask(userId: string, taskId: string, dto: UpdateTaskDto) {
     return this.taskRepository.updateTask(userId, taskId, dto);
+  }
+
+  deleteTask(userId: string, taskId: string) {
+    return this.taskRepository.deleteTask(userId, taskId);
   }
 }

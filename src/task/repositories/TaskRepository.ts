@@ -94,4 +94,21 @@ export class TaskRepository implements iTaskRepository {
 
     return editedTask;
   }
+
+  async deleteTask(userId: string, taskId: string) {
+    const task = await this.prisma.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
+
+    if (task.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    await this.prisma.task.delete({
+      where: {
+        id: taskId,
+      },
+    });
+  }
 }

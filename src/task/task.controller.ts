@@ -8,6 +8,7 @@ import {
   Get,
   Param,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -49,6 +50,11 @@ export class TaskController {
     @Param('taskId') taskId: string,
     @Body() dto: UpdateDealDto,
   ) {
-    return this.taskService.updateDeal(userId, taskId, dto);
+    return this.taskService.updateTask(userId, taskId, dto);
+  }
+
+  @Delete(':taskId')
+  deleteTask(@GetUser('id') userId: string, @Param('taskId') taskId: string) {
+    return this.taskService.deleteTask(userId, taskId);
   }
 }
