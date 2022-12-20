@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto } from '../dto/create-task.dto';
+import { UpdateTaskDto } from '../dto/update-task.dto';
 import { TaskEntity } from '../entities/task.entity';
 import { iTaskRepository } from './i-task.repository';
 
@@ -70,5 +71,27 @@ export class TaskRepository implements iTaskRepository {
       throw new ForbiddenException('access to resource denied');
 
     return task;
+  }
+
+  async updateTask(userId: string, taskId: string, dto: UpdateTaskDto) {
+    const task = await this.prisma.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
+
+    if (task.userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    const editedTask = await this.prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        ...dto,
+      },
+    });
+
+    return editedTask;
   }
 }

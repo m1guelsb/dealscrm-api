@@ -7,9 +7,11 @@ import {
   Headers,
   Get,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
+import { UpdateDealDto } from 'src/deal/dto/update-deal.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskService } from './task.service';
 
@@ -39,5 +41,14 @@ export class TaskController {
   @Get(':taskId')
   findOneTask(@GetUser('id') userId: string, @Param('taskId') taskId: string) {
     return this.taskService.findOneTask(userId, taskId);
+  }
+
+  @Patch(':taskId')
+  updateTask(
+    @GetUser('id') userId: string,
+    @Param('taskId') taskId: string,
+    @Body() dto: UpdateDealDto,
+  ) {
+    return this.taskService.updateDeal(userId, taskId, dto);
   }
 }

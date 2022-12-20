@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './repositories/TaskRepository';
 
 @Injectable()
@@ -16,5 +17,9 @@ export class TaskService {
 
   findOneTask(userId: string, taskId: string) {
     return this.taskRepository.findOneTask(userId, taskId);
+  }
+
+  updateDeal(userId: string, taskId: string, dto: UpdateTaskDto) {
+    return this.taskRepository.updateTask(userId, taskId, dto);
   }
 }
