@@ -662,8 +662,24 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get task by id', () => {
-      it.todo('should get one task');
+    describe('Find one task', () => {
+      it('should find one task', () => {
+        return pactum
+          .spec()
+          .get('/tasks/{taskId}')
+          .withPathParams('taskId', '$S{task.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200);
+      });
+      describe('find one customer exceptions', () => {
+        it('should throw 404', () => {
+          return pactum
+            .spec()
+            .get('/tasks/wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
     });
 
     describe('Patch task', () => {
