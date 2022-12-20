@@ -41,4 +41,17 @@ export class TaskRepository implements iTaskRepository {
 
     return new TaskEntity(newTask);
   }
+
+  async findAllTasks(userId: string): Promise<TaskEntity[]> {
+    const tasksList = await this.prisma.task.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    if (!!tasksList.length && tasksList[0].userId !== userId)
+      throw new ForbiddenException('access to resource denied');
+
+    return tasksList;
+  }
 }

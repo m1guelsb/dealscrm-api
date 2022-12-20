@@ -9,4 +9,8 @@ export class TaskService {
   createTask(userId: string, dealId: string, dto: CreateTaskDto) {
     return this.taskRepository.createTask(userId, dealId, dto);
   }
+
+  findAllTasks(userId: string) {
+    return this.taskRepository.findAllTasks(userId);
+  }
 }

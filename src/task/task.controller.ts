@@ -5,6 +5,7 @@ import {
   UseGuards,
   UnprocessableEntityException,
   Headers,
+  Get,
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
@@ -27,5 +28,10 @@ export class TaskController {
         '{ dealId: string } header is required',
       );
     return this.taskService.createTask(userId, dealId, dto);
+  }
+
+  @Get()
+  findAllTasks(@GetUser('id') userId: string) {
+    return this.taskService.findAllTasks(userId);
   }
 }

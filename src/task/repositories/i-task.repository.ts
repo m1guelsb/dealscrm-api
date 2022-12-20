@@ -8,7 +8,7 @@ export interface iTaskRepository {
     dto: CreateTaskDto,
   ) => Promise<TaskEntity>;
 
-  // findAllTasks: (userId: string) => Promise<TaskEntity[]>;
+  findAllTasks: (userId: string) => Promise<TaskEntity[]>;
 
   // findOneTask: (userId: string, taskId: string) => Promise<TaskEntity>;
 
