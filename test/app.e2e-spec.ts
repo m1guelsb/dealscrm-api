@@ -569,6 +569,15 @@ describe('App e2e', () => {
   });
 
   describe('\x1b[45m-Task\x1b[0m', () => {
+    it('should return empty tasks array', () => {
+      return pactum
+        .spec()
+        .get('/tasks')
+        .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+        .expectStatus(200)
+        .expectBody([]);
+    });
+
     pactum.handler.addCaptureHandler('testTask', (ctx) => {
       return ctx.res.body;
     });
@@ -642,8 +651,15 @@ describe('App e2e', () => {
       });
     });
 
-    describe('Get tasks', () => {
-      it.todo('should list many tasks');
+    describe('Find all tasks', () => {
+      it('should find all tasks', () => {
+        return pactum
+          .spec()
+          .get('/tasks')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectJsonLength(2);
+      });
     });
 
     describe('Get task by id', () => {
