@@ -516,6 +516,28 @@ describe('App e2e', () => {
       });
     });
 
+    describe('Find one deal all tasks', () => {
+      it('should find deal all tasks', () => {
+        return pactum
+          .spec()
+          .get('/deals/{dealId}/tasks')
+          .withPathParams('dealId', '$S{testDeal.id}')
+          .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+      describe('find one deal all tasks exceptions', () => {
+        it('should throw 404 (deal not found)', () => {
+          return pactum
+            .spec()
+            .get('/deals/{dealId}/tasks')
+            .withPathParams('dealId', 'wrong-id')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .expectStatus(404);
+        });
+      });
+    });
+
     describe('Update deal', () => {
       const updateDealDto: UpdateDealDto = {
         title: 'edited deal',
