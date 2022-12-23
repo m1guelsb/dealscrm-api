@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { DealEntity } from '../entities/deal.entity';
 
 export class CreateDealDto implements Partial<DealEntity> {

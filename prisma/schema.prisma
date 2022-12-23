@@ -40,6 +40,11 @@ model Customer {
   @@map("customers")
 }
 
+enum DealStatus {
+  IN_PROGRESS
+  CLOSED
+}
+
 model Deal {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
@@ -47,6 +52,7 @@ model Deal {
 
   title       String
   description String
+  status      DealStatus @default(IN_PROGRESS)
   price       Int
 
   userId String
