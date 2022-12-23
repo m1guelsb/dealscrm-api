@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { TaskEntity } from 'src/task/entities/task.entity';
 import { CreateDealDto } from '../dto/create-deal.dto';
 import { UpdateDealDto } from '../dto/update-deal.dto';
 import { DealEntity } from '../entities/deal.entity';
@@ -67,6 +68,25 @@ export class DealRepository implements iDealRepository {
       throw new ForbiddenException('access to resource denied');
 
     return deal;
+  }
+
+  async findAllDealTasks(dealId: string): Promise<TaskEntity[]> {
+    const deal = await this.prisma.deal.findUnique({
+      where: {
+        id: dealId,
+      },
+    });
+
+    if (!deal)
+      throw new NotFoundException('deal with the provided id does not exists');
+
+    const dealTasksList = await this.prisma.task.findMany({
+      where: {
+        dealId,
+      },
+    });
+
+    return dealTasksList;
   }
 
   async updateDeal(userId: string, dealId: string, dto: UpdateDealDto) {

@@ -44,6 +44,11 @@ export class DealController {
     return this.dealService.findOneDeal(userId, dealId);
   }
 
+  @Get(':dealId/tasks')
+  findAllDealTasks(@Param('dealId') dealId: string) {
+    return this.dealService.findAllDealTasks(dealId);
+  }
+
   @Patch(':dealId')
   updateDeal(
     @GetUser('id') userId: string,

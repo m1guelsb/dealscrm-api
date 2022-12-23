@@ -19,6 +19,10 @@ export class DealService {
     return this.dealRepository.findOneDeal(userId, dealId);
   }
 
+  findAllDealTasks(dealId: string) {
+    return this.dealRepository.findAllDealTasks(dealId);
+  }
+
   updateDeal(userId: string, dealId: string, dto: UpdateDealDto) {
     return this.dealRepository.updateDeal(userId, dealId, dto);
   }
