@@ -542,6 +542,7 @@ describe('App e2e', () => {
       const updateDealDto: UpdateDealDto = {
         title: 'edited deal',
         description: 'edit deal description',
+        status: 'CLOSED',
         price: 99,
       };
 
@@ -553,7 +554,7 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .withBody(updateDealDto)
           .expectStatus(200)
-          .expectBodyContains(updateDealDto.title);
+          .expectBodyContains(updateDealDto.status);
       });
 
       describe('edit one deal exceptions', () => {
@@ -564,6 +565,17 @@ describe('App e2e', () => {
             .withPathParams('dealId', 'wrong-id')
             .withHeaders({ Authorization: 'Bearer $S{access_token}' })
             .expectStatus(404);
+        });
+        it('should throw 304 (status should be "CLOSED", "IN_PROGRESS")', () => {
+          return pactum
+            .spec()
+            .patch('/deals/{dealId}')
+            .withPathParams('dealId', '$S{testDeal.id}')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .withBody({
+              status: 'wrong-value',
+            })
+            .expectStatus(400);
         });
       });
     });
