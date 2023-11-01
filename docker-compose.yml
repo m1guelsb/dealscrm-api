@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: m1guelsb
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: dealscrm
+    networks:
+      - m1guelsb-network
+        
+  test-db:
+    image: postgres:13
+    ports:
+      - 5433:5433
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: dealscrm
+    networks:
+      - m1guelsb-network
+  
+  # api:
+  #   image: m1guelsb/dealscrm-api
+  #   restart: always
+  #   ports:
+  #     - 3001:3001
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - m1guelsb-network
+
+networks:
+  m1guelsb-network:
+    driver: bridge

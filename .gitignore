@@ -4,8 +4,6 @@
 
 #dev env
 .env
-.env.test
-docker-compose.yml
 
 # Logs
 logs
