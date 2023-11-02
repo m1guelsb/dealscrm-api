@@ -623,11 +623,11 @@ describe('App e2e', () => {
     describe('Create a deal task', () => {
       const testTaskDto: CreateTaskDto = {
         title: 'test task',
-        dueDate: new Date(),
+        dueDate: '2023-12-31',
       };
       const taskDto: CreateTaskDto = {
         title: 'task',
-        dueDate: new Date(),
+        dueDate: '2023-12-31',
       };
 
       it('should create a test deal task', () => {
@@ -720,7 +720,7 @@ describe('App e2e', () => {
     describe('Update task', () => {
       const updateTaskDto: UpdateTaskDto = {
         title: 'edited task',
-        dueDate: new Date(),
+        dueDate: '2024-01-01',
         isCompleted: true,
       };
 
@@ -732,7 +732,9 @@ describe('App e2e', () => {
           .withHeaders({ Authorization: 'Bearer $S{access_token}' })
           .withBody(updateTaskDto)
           .expectStatus(200)
-          .expectBodyContains(updateTaskDto.title);
+          .expectBodyContains(updateTaskDto.title)
+          .expectBodyContains(updateTaskDto.dueDate)
+          .expectBodyContains(updateTaskDto.isCompleted);
       });
 
       describe('edit one task exceptions', () => {
