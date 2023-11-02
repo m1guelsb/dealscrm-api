@@ -20,10 +20,14 @@ jobs:
           password: ${{  secrets.DOCKER_PASSWORD  }}
 
       - name: Build Docker image
-        run: docker build -t m1guelsb/dealscrm:latest .
+        run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Push Docker image to Docker Hub
-        run: docker build -t m1guelsb/dealscrm:latest
+        run: |
+          docker pull m1guelsb/spring-api:latest
+          docker tag ${{  secrets.DOCKER_USERNAME  }}/spring-api ${{  secrets.DOCKER_USERNAME  }}/spring-api:${{  github.run_id  }}
+          docker push ${{  secrets.DOCKER_USERNAME  }}/spring-api:${{  github.run_id  }}
+          docker push ${{  secrets.DOCKER_USERNAME  }}/spring-api
 
   # Test
   test:
