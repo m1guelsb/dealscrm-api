@@ -9,4 +9,8 @@ export class UserService {
   editUser(userId: string, dto: EditUserDto) {
     return this.userRepository.editUser(userId, dto);
   }
+
+  delete(userId: string) {
+    return this.userRepository.delete(userId);
+  }
 }

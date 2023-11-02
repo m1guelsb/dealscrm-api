@@ -13,8 +13,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   email    String @unique
-  name     String
-  password String
+  name     String @db.VarChar(100)
+  password String @db.VarChar(255)
 
   customers Customer[]
   Deal      Deal[]
@@ -28,12 +28,12 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name  String
-  email String
-  phone String
+  name  String @db.VarChar(100)
+  email String @db.VarChar(100)
+  phone String @db.VarChar(30)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   deals Deal[]
 
@@ -50,16 +50,16 @@ model Deal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
-  description String
+  title       String     @db.VarChar(100)
+  description String     @db.VarChar(100)
   status      DealStatus @default(IN_PROGRESS)
   price       Int
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   customerId String
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   tasks Task[]
 
@@ -71,15 +71,15 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  title       String
-  dueDate     String
+  title       String  @db.VarChar(100)
+  dueDate     String  @db.VarChar(10)
   isCompleted Boolean @default(false)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   dealId String
-  deal   Deal   @relation(fields: [dealId], references: [id])
+  deal   Deal   @relation(fields: [dealId], references: [id], onDelete: Cascade)
 
   @@map("tasks")
 }

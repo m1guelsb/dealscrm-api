@@ -2,7 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Patch,
   UseGuards,
   UseInterceptors,
@@ -29,5 +31,12 @@ export class UserController {
   @Patch('me')
   editUser(@GetUser('id') userId: string, @Body() dto: EditUserDto) {
     return this.userService.editUser(userId, dto);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Delete('me')
+  @HttpCode(204)
+  deleteDeal(@GetUser('id') userId: string) {
+    return this.userService.delete(userId);
   }
 }

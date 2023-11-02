@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class SignupDtoInput implements Prisma.UserCreateInput {
   @IsEmail()
@@ -8,9 +8,11 @@ export class SignupDtoInput implements Prisma.UserCreateInput {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(100)
   name: string;
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(255)
   password: string;
 }

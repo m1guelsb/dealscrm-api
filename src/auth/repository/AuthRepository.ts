@@ -29,7 +29,7 @@ export class AuthRepository implements iAuthRepository {
     });
 
     if (isEmailRegistered)
-      throw new ForbiddenException('email already registred');
+      throw new ForbiddenException('email already registered');
 
     const hash = await argon.hash(dto.password);
 

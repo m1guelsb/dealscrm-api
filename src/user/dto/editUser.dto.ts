@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class EditUserDto {
   @IsEmail()
@@ -7,5 +7,10 @@ export class EditUserDto {
 
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   name?: string;
+
+  @IsString()
+  @IsOptional()
+  password?: string;
 }

@@ -1,9 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { CustomerEntity } from '../entities/customer.entity';
 
 export class CreateCustomerDto implements Partial<CustomerEntity> {
   @IsString()
   @IsNotEmpty()
+  @MaxLength(100)
   name: string;
 
   @IsEmail()
@@ -12,5 +13,6 @@ export class CreateCustomerDto implements Partial<CustomerEntity> {
 
   @IsString()
   @IsNotEmpty()
+  @MaxLength(30)
   phone: string;
 }

@@ -1,9 +1,10 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
 import { CreateCustomerDto } from './create-customer.dto';
 
 export class UpdateCustomerDto implements Partial<CreateCustomerDto> {
   @IsString()
   @IsOptional()
+  @MaxLength(100)
   name?: string;
 
   @IsEmail()
@@ -12,5 +13,6 @@ export class UpdateCustomerDto implements Partial<CreateCustomerDto> {
 
   @IsString()
   @IsOptional()
+  @MaxLength(30)
   phone?: string;
 }
