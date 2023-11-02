@@ -20,12 +20,12 @@ jobs:
           password: ${{  secrets.DOCKER_PASSWORD  }}
 
       - name: Build Docker image
-        run: docker buildx build .
+        run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Push Docker image to Docker Hub
         run: |
           docker push ${{  secrets.DOCKER_USERNAME  }}/spring-api:${{  github.run_id  }}
-          docker push ${{  secrets.DOCKER_USERNAME  }}/spring-api:latest
+          docker push ${{  secrets.DOCKER_USERNAME  }}/spring-api
 
   # Test
   test:
