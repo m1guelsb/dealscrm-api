@@ -60,13 +60,13 @@ describe('App e2e', () => {
       });
 
       describe('signup exceptions', () => {
-        it('should throw 403 (email already registred)', () => {
+        it('should throw 403 (email already registered)', () => {
           return pactum
             .spec()
             .post('/auth/signup')
             .withBody(signupDto)
             .expectStatus(403)
-            .expectBodyContains('email already registred');
+            .expectBodyContains('email already registered');
         });
 
         it('should throw 400 (should not be empty)', () => {
@@ -205,6 +205,15 @@ describe('App e2e', () => {
             .expectStatus(400)
             .expectBodyContains('email must be an email')
             .expectBodyContains('name must be a string');
+        });
+        it('should throw 400 (email already registered)', () => {
+          return pactum
+            .spec()
+            .patch('/users/me')
+            .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+            .withBody(editUserDto)
+            .expectStatus(400)
+            .expectBodyContains('email already registered');
         });
       });
     });
@@ -769,6 +778,16 @@ describe('App e2e', () => {
             .expectStatus(404);
         });
       });
+    });
+  });
+
+  describe('\x1b[42m-Deletion\x1b[0m', () => {
+    it('should delete current user and all his data', () => {
+      return pactum
+        .spec()
+        .delete('/users/me')
+        .withHeaders({ Authorization: 'Bearer $S{access_token}' })
+        .expectStatus(204);
     });
   });
 });
