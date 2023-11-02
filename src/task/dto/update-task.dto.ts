@@ -8,7 +8,7 @@ export class UpdateTaskDto implements Partial<CreateTaskDto> {
 
   @IsDateString()
   @IsOptional()
-  dueDate?: Date;
+  dueDate?: string;
 
   @IsBoolean()
   @IsOptional()

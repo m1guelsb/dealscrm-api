@@ -88,7 +88,9 @@ export class TaskRepository implements iTaskRepository {
         id: taskId,
       },
       data: {
-        ...dto,
+        title: dto.title,
+        dueDate: dto.dueDate,
+        isCompleted: dto.isCompleted,
       },
     });
 

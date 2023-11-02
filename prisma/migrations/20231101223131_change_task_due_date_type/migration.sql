@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "deals" ALTER COLUMN "status" SET DEFAULT 'IN_PROGRESS';
+
+-- AlterTable
+ALTER TABLE "tasks" ALTER COLUMN "dueDate" SET DATA TYPE TEXT;

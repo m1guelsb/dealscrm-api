@@ -5,7 +5,7 @@ export class TaskEntity implements Partial<Task> {
   createdAt: Date;
   updatedAt: Date;
   title: string;
-  dueDate: Date;
+  dueDate: string;
   isCompleted: boolean;
   dealId: string;
 

@@ -72,8 +72,8 @@ model Task {
   updatedAt DateTime @updatedAt
 
   title       String
-  dueDate     DateTime
-  isCompleted Boolean  @default(false)
+  dueDate     String
+  isCompleted Boolean @default(false)
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

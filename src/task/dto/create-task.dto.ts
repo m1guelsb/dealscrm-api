@@ -5,16 +5,15 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { TaskEntity } from '../entities/task.entity';
 
-export class CreateTaskDto implements Partial<TaskEntity> {
+export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
   title: string;
 
   @IsDateString()
   @IsNotEmpty()
-  dueDate: Date;
+  dueDate: string;
 
   @IsBoolean()
   @IsOptional()
