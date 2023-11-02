@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { GetUser } from 'src/auth/decorator';
 import { JwtGuard } from 'src/auth/guard';
-import { UpdateDealDto } from 'src/deal/dto/update-deal.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskService } from './task.service';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @UseGuards(JwtGuard)
 @Controller('tasks')
@@ -48,7 +48,7 @@ export class TaskController {
   updateTask(
     @GetUser('id') userId: string,
     @Param('taskId') taskId: string,
-    @Body() dto: UpdateDealDto,
+    @Body() dto: UpdateTaskDto,
   ) {
     return this.taskService.updateTask(userId, taskId, dto);
   }

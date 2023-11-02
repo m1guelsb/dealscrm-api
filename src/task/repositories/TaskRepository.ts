@@ -83,15 +83,13 @@ export class TaskRepository implements iTaskRepository {
     if (task.userId !== userId)
       throw new ForbiddenException('access to resource denied');
 
+    console.log('dto :>> ', dto);
+
     const editedTask = await this.prisma.task.update({
       where: {
         id: taskId,
       },
-      data: {
-        title: dto.title,
-        dueDate: dto.dueDate,
-        isCompleted: dto.isCompleted,
-      },
+      data: dto,
     });
 
     return editedTask;
