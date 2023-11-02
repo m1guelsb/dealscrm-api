@@ -20,10 +20,10 @@ jobs:
           password: ${{  secrets.DOCKER_PASSWORD  }}
 
       - name: Build Docker image
-        run: docker build -t m1guelsb/dealscrm:${{ github.sha }} .
+        run: docker build -t m1guelsb/dealscrm:latest .
 
       - name: Push Docker image to Docker Hub
-        run: docker build -t m1guelsb/dealscrm:${{ github.sha }}
+        run: docker build -t m1guelsb/dealscrm:latest
 
   # Test
   test:
