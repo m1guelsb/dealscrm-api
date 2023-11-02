@@ -65,6 +65,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run migrations
-        run: npm prisma:migrate
+        run: npm run prisma:migrate
 
       # - name: Deploy to FL0
