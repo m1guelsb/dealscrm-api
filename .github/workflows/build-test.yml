@@ -28,7 +28,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dealscrm-api:latest ${{  secrets.DOCKER_USERNAME  }}/dealscrm-api:${{  github.run_id  }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/dealscrm-api:latest
 
   # Test
   test:
