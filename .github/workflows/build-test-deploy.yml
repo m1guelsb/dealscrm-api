@@ -69,6 +69,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies again
+        run: npm install
+
       - name: Run migrations
         run: npm run prisma:migrate
 
