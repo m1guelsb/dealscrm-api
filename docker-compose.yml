@@ -14,23 +14,23 @@ services:
   test-db:
     image: postgres:13
     ports:
-      - 5433:5433
+      - 5436:5432
     environment:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: test
       POSTGRES_DB: dealscrm
     networks:
       - m1guelsb-network
-  
-  # api:
-  #   image: m1guelsb/dealscrm-api
-  #   restart: always
-  #   ports:
-  #     - 3001:3001
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - m1guelsb-network
+      
+  api:
+    image: m1guelsb/dealscrm-api
+    restart: always
+    ports:
+      - 3001:3001
+    depends_on:
+      - db
+    networks:
+      - m1guelsb-network
 
 networks:
   m1guelsb-network:
