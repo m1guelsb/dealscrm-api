@@ -55,27 +55,11 @@ jobs:
 
   #Deploy
   deploy:
-    env:
-      DATABASE_URL: ${{  secrets.DATABASE_URL  }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up Node 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install dependencies again
-        run: npm install
-
-      - name: Run migrations
-        run: npm run prisma:migrate
 
       - name: Deploy to production
         uses: johnbeynon/render-deploy-action@v0.0.8
